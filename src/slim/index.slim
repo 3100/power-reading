@@ -2,11 +2,16 @@ doctype html
 html
   head
     meta charset="UTF-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
     link href="/lib/css/bootstrap.min.css" rel="stylesheet"
+    link href="/lib/css/bootstrap-responsive.min.css" rel="stylesheet"
     link href="css/application.css" rel="stylesheet"
     script src="lib/js/jquery-1.9.1.min.js"
-    script src="lib/js/jquery-csv.0.71.min.js"
     script src="lib/js/bootstrap.min.js"
     script src="js/application.js"
   body
-    div
+    div.container.raw
+      div.hero-unit
+        h1#time Book Timer
+        p#description This is a simple 15 minutes timer to empower your reading.
+        button#start-button.btn.btn-primary.btn-large Start
