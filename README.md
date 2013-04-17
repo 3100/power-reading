@@ -1,4 +1,4 @@
-A project template for developing a client-side application with `coffee-script`, `sass`, `slim`.
+My project template with `coffee-script`, `sass`, `slim`.
 ---
 
 This uses `guard` and `sprockets` for release a product automatically:
