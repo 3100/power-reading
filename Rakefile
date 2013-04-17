@@ -11,6 +11,8 @@ task :compile do
     assets = environment.find_asset File.basename bundle
     assets.write_to bundle
   end
+
+  `slimrb -p src/slim/index.slim > public/index.html`
 end
 
 task :default => :compile

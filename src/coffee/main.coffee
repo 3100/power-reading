@@ -1,25 +1,26 @@
 $ ->
   $("#start-button").click ->
-    new MyTimer("#time").start()
-    $("#description").html new RandomQuote().get() 
+    sound = "/se/" + new RandomJson("/data/sound.json").get()
+    MyTimer.get("#time", "#start-button", sound).start()
+    $("#description").html new RandomJson('/data/quotes.json').get()
 
-  class RandomQuote
-    constructor: ->
+  class RandomJson
+    constructor: (@path) ->
 
     load: ->
       unless @list?
-        json = $.ajax('/quotes.json',
+        json = $.ajax(@path,
           type: "GET"
-          url: "quotes.json"
           dataType: "json"
           async: false
         ).responseText
-        @list = $.parseJSON(json).quote
+        @list = $.parseJSON(json).data
       @list
 
     get: ->
       @load()
-      index = Math.ceil Math.random(@list.size-1)+0.5
+      # cf. http://www.shawnolson.net/a/789/make_javascript_mathrandom_useful.html
+      index = Math.floor(Math.random() * (@list.length-1))
       @list[index]
 
   class AudioPlayer
@@ -27,10 +28,10 @@ $ ->
       @audio = new Audio path
 
     isEnable: ->
-      @audio.canPlayType("audio/mp3") == 'maybe'
+      @audio.canPlayType("audio/ogg") == 'maybe'
 
     play: ->
-      if isEnable() == true
+      if @isEnable() == true
         @audio.play()
         true
       else
@@ -38,30 +39,48 @@ $ ->
 
   class MyTimer
     REST_MINUTES = 15
-    A_MINUTE = 1000*60
+    #A_MINUTE = 1000*60
+    A_MINUTE = 1000 # for debug
 
-    constructor: (targetID) ->
-      @rest = REST_MINUTES 
-      @target = $(targetID)
-      if @target.size == 0
-        alert "Invalid target ID."
-        return false
-      @player = new AudioPlayer "/se/densi01.mp3"
-      alert "Your environmet is unable to play a mp3 file." unless @player.isEnable
+    instance = null
 
-    start: ->
-      @updateHtml()
-      callback = @timerOn.bind(this)
-      @timer = setInterval callback, A_MINUTE
+    @get: (targetID, buttonID, soundPath) ->
+      instance ?= new _myTimer(targetID, buttonID)
+      instance.soundPath = soundPath
+      instance
 
-    timerOn: ->
-      @rest -= 1
-      @timerOff() if @rest == 0
-      @updateHtml()
+    class _myTimer
+      constructor: (targetID, buttonID) ->
+        @target = $(targetID)
+        @button = $(buttonID)
+        if @target.size == 0
+          alert "Invalid target ID."
+          return false
 
-    timerOff: ->
-      clearInterval @timer
-      @player.play()
+      start: ->
+        @rest = REST_MINUTES
+        clearInterval @timer if @timer?
 
-    updateHtml: ->
-      @target.html @rest + " min to go."
+        @button.html "Start"
+        @player = new AudioPlayer(@soundPath)
+        alert "Your environmet is unable to play a ogg file." unless @player.isEnable
+        @updateHtml()
+        callback = @timerOn.bind(this)
+        @timer = setInterval callback, A_MINUTE
+
+      timerOn: ->
+        @rest -= 1
+        @updateHtml()
+        @timerOff() if @rest == 0
+
+      timerOff: ->
+        clearInterval @timer
+        @finishHtml()
+        @player.play()
+
+      updateHtml: ->
+        @target.html @rest + " min to go."
+
+      finishHtml: ->
+        @target.html "Finished."
+        @button.html "Continue?"
