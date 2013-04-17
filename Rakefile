@@ -1,4 +1,4 @@
-BUNDLES = %w(js/application.js css/application.css)
+BUNDLES = %w(public/js/application.js public/css/application.css)
 
 task :compile do
   require 'sprockets'
@@ -7,8 +7,9 @@ task :compile do
   environment.append_path 'src/sass'
 
   BUNDLES.each do |bundle|
-    assets = environment.find_asset File.basename(bundle)
-    assets.write_to("public/" + bundle + ".tmp")
+    FileUtils.mkdir_p File.dirname bundle
+    assets = environment.find_asset File.basename bundle
+    assets.write_to bundle
   end
 end
 
