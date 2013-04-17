@@ -1,23 +1,10 @@
-My project template with `coffee-script`, `sass`, `slim`.
+A simple timer to make 15 minutes for reading.
 ---
 
-This uses `guard` and `sprockets` for release a product automatically:
+# Click and Read!
 
-* `coffee-script` to `javascript`
-* `sass` to `css`
-* `slim` to `html`
+# Thanks
 
-It contains `twitter-bootstrap` and `jQuery` mainly because I use them. Remove them if you don't need.
+for great sound effect:
 
-# Setup
-
-    bundle install
-    guard
-
-It  monitors `src` folder and generate files into `public` folder.
-
-# Goal
-
-* Enable to use on Linux, OS X and Windows(Cygwin).
-* Easy to change some template engines. (cf. Sass -> Compass)
-
+http://www.nano-graph.com/
