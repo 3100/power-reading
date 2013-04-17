@@ -39,8 +39,8 @@ $ ->
 
   class MyTimer
     REST_MINUTES = 15
-    #A_MINUTE = 1000*60
-    A_MINUTE = 1000 # for debug
+    A_MINUTE = 1000*60
+    #A_MINUTE = 1000 # for debug
 
     instance = null
 
